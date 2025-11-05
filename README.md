@@ -398,6 +398,6 @@ Communication between layers uses RESTful APIs with JSON payloads. Long-running 
 
 ## License
 
-[MIT License](./licence)
+[MIT License](./LICENSE)
 
 
