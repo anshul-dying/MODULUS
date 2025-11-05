@@ -1,0 +1,53 @@
+# Core dependencies
+fastapi
+uvicorn[standard]
+pydantic
+python-multipart
+
+# Machine Learning (using pre-compiled wheels)
+scikit-learn
+pandas
+numpy
+matplotlib
+seaborn
+plotly
+joblib
+
+# Deep Learning & Hugging Face ecosystem
+torch
+transformers
+accelerate
+datasets
+huggingface-hub
+albumentations
+
+# Image Processing and Computer Vision
+opencv-python
+Pillow
+imageio
+scikit-image
+
+# Data processing
+ydata-profiling
+openpyxl
+pyarrow
+fastparquet
+
+# Database
+sqlalchemy
+
+# Utilities
+python-dotenv
+pydantic-settings
+loguru
+jinja2
+requests
+
+# AI and LLM
+google-generativeai
+
+# Development
+pytest
+pytest-asyncio
+black
+flake8

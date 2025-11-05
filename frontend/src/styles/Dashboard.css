@@ -1,0 +1,60 @@
+.dashboard-container {
+    min-height: calc(100vh - 64px);
+    background: #113F67;
+    position: relative;
+    overflow-x: hidden;
+    margin: -24px;
+    padding: 24px;
+}
+
+.glassmorphism-card {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid #58A0C8 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    transition: all 0.2s ease !important;
+}
+
+.glassmorphism-card:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 24px;
+}
+
+.section-title {
+    color: white !important;
+    font-weight: 600 !important;
+    margin-bottom: 16px !important;
+}
+
+.list-item {
+    background: rgba(255, 255, 255, 0.08) !important;
+    margin-bottom: 8px !important;
+    border-radius: 8px !important;
+    border: 1px solid #58A0C8 !important;
+    transition: all 0.2s ease !important;
+}
+
+.list-item:hover {
+    background: rgba(88, 160, 200, 0.1) !important;
+    border-color: #FDF5AA !important;
+}
+
+.MuiListItemText-primary {
+    color: white !important;
+}
+
+.MuiListItemText-secondary {
+    color: rgba(255, 255, 255, 0.7) !important;
+}

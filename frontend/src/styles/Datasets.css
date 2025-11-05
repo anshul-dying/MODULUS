@@ -1,0 +1,116 @@
+.datasets-container {
+    min-height: calc(100vh - 64px);
+    background: #113F67;
+    position: relative;
+    overflow-x: hidden;
+    margin: -24px;
+    padding: 24px;
+}
+
+.glassmorphism-card {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid #58A0C8 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    transition: all 0.2s ease !important;
+}
+
+.glassmorphism-card:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+.neural-button {
+    background: #34699A !important;
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 12px 24px !important;
+    font-weight: 500 !important;
+    text-transform: none !important;
+    color: white !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    transition: all 0.2s ease !important;
+}
+
+.neural-button:hover {
+    background: #58A0C8 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.neural-button:disabled {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: rgba(255, 255, 255, 0.3) !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+.custom-table {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid #58A0C8 !important;
+    border-radius: 8px !important;
+    overflow: hidden;
+}
+
+.table-header {
+    background: #34699A !important;
+}
+
+.table-header .MuiTableCell-root {
+    color: white !important;
+    font-weight: 600 !important;
+    border-bottom: 1px solid #58A0C8 !important;
+}
+
+.table-row {
+    transition: all 0.2s ease !important;
+}
+
+.table-row:hover {
+    background: rgba(88, 160, 200, 0.1) !important;
+}
+
+.table-row .MuiTableCell-root {
+    color: white !important;
+    border-bottom: 1px solid rgba(88, 160, 200, 0.2) !important;
+}
+
+.action-button {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid #58A0C8 !important;
+    transition: all 0.2s ease !important;
+}
+
+.action-button:hover {
+    background: #58A0C8 !important;
+    transform: scale(1.05) !important;
+}
+
+.upload-dialog .MuiDialog-paper {
+    background: #113F67 !important;
+    border: 1px solid #58A0C8 !important;
+    border-radius: 8px !important;
+}
+
+.upload-dialog .MuiDialogTitle-root {
+    color: white !important;
+    font-weight: 600 !important;
+}
+
+.upload-dialog .MuiDialogContent-root {
+    color: white !important;
+}
+
+.file-upload-area {
+    border: 2px dashed #58A0C8 !important;
+    border-radius: 8px !important;
+    padding: 24px !important;
+    text-align: center !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    transition: all 0.2s ease !important;
+    cursor: pointer;
+}
+
+.file-upload-area:hover {
+    border-color: #FDF5AA !important;
+    background: rgba(88, 160, 200, 0.1) !important;
+}

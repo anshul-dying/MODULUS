@@ -1,0 +1,30 @@
+# Example AutoTrain Advanced Configuration
+
+# Dataset Configuration
+dataset:
+  name: "sample_dataset"
+  path: "data/uploads/sample.csv"
+  target_column: "target"
+  task_type: "classification"  # or "regression"
+
+# Model Configuration
+model:
+  algorithm: "random_forest"  # random_forest, logistic_regression, linear_regression, svm
+  parameters:
+    n_estimators: 100
+    random_state: 42
+    max_depth: 10
+
+# Training Configuration
+training:
+  test_size: 0.2
+  random_state: 42
+  cross_validation: true
+  cv_folds: 5
+
+# Export Configuration
+export:
+  format: "zip"  # zip, tar, model
+  include_model: true
+  include_report: true
+  include_data: false

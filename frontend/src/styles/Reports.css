@@ -1,0 +1,149 @@
+.reports-container {
+    min-height: calc(100vh - 64px);
+    background: #113F67;
+    position: relative;
+    overflow-x: hidden;
+    margin: -24px;
+    padding: 24px;
+}
+
+.glassmorphism-card {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid #58A0C8 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    transition: all 0.2s ease !important;
+}
+
+.glassmorphism-card:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+.neural-button {
+    background: #34699A !important;
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 12px 24px !important;
+    font-weight: 500 !important;
+    text-transform: none !important;
+    color: white !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    transition: all 0.2s ease !important;
+}
+
+.neural-button:hover {
+    background: #58A0C8 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.neural-button:disabled {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: rgba(255, 255, 255, 0.3) !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+.outline-button {
+    background: transparent !important;
+    border: 1px solid #58A0C8 !important;
+    color: white !important;
+    border-radius: 6px !important;
+    padding: 12px 24px !important;
+    font-weight: 500 !important;
+    text-transform: none !important;
+    transition: all 0.2s ease !important;
+}
+
+.outline-button:hover {
+    background: #58A0C8 !important;
+    border-color: #FDF5AA !important;
+    transform: translateY(-1px) !important;
+}
+
+.list-item {
+    background: rgba(255, 255, 255, 0.08) !important;
+    margin-bottom: 8px !important;
+    border-radius: 8px !important;
+    border: 1px solid #58A0C8 !important;
+    transition: all 0.2s ease !important;
+}
+
+.list-item:hover {
+    background: rgba(88, 160, 200, 0.1) !important;
+    border-color: #FDF5AA !important;
+}
+
+.action-button {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid #58A0C8 !important;
+    transition: all 0.2s ease !important;
+}
+
+.action-button:hover {
+    background: #58A0C8 !important;
+    transform: scale(1.05) !important;
+}
+
+.MuiListItemText-primary {
+    color: white !important;
+}
+
+.MuiListItemText-secondary {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.section-title {
+    color: white !important;
+    font-weight: 600 !important;
+    margin-bottom: 16px !important;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 24px;
+    margin-top: 24px;
+}
+
+.feature-card {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid #58A0C8 !important;
+    border-radius: 8px !important;
+    transition: all 0.2s ease !important;
+}
+
+.feature-card:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+.feature-icon {
+    width: 48px;
+    height: 48px;
+    background: #34699A;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 48px 24px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.empty-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(88, 160, 200, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    border: 2px dashed #58A0C8;
+}

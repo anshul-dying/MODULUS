@@ -1,0 +1,15 @@
+# Simplified requirements for Windows compatibility
+fastapi
+uvicorn[standard]
+pydantic
+python-multipart
+pandas
+numpy
+matplotlib
+seaborn
+plotly
+openpyxl
+sqlalchemy
+python-dotenv
+pydantic-settings
+loguru

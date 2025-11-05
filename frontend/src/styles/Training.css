@@ -1,0 +1,186 @@
+.neural-training-container {
+    min-height: calc(100vh - 64px);
+    background: #113F67;
+    position: relative;
+    overflow-x: hidden;
+    margin: -24px;
+    padding: 24px;
+}
+
+.glassmorphism-card {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid #58A0C8 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    transition: all 0.2s ease !important;
+}
+
+.glassmorphism-card:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+.custom-input {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-radius: 6px !important;
+    border: 1px solid #58A0C8 !important;
+    transition: all 0.2s ease !important;
+}
+
+.custom-input:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-color: #FDF5AA !important;
+}
+
+.custom-input:focus-within {
+    border-color: #FDF5AA !important;
+    box-shadow: 0 0 0 2px rgba(253, 245, 170, 0.2) !important;
+}
+
+.custom-input .MuiInputBase-input {
+    color: white !important;
+}
+
+.custom-input .MuiInputLabel-root {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.custom-input .MuiInputLabel-root.Mui-focused {
+    color: #FDF5AA !important;
+}
+
+.neural-button {
+    background: #34699A !important;
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 16px 32px !important;
+    font-weight: 500 !important;
+    text-transform: none !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    transition: all 0.2s ease !important;
+}
+
+.neural-button:hover {
+    background: #58A0C8 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.neural-button:active {
+    transform: translateY(0) !important;
+}
+
+.neural-button:disabled {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: rgba(255, 255, 255, 0.3) !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+.job-item {
+    background: rgba(255, 255, 255, 0.08) !important;
+    margin-bottom: 12px !important;
+    border-radius: 8px !important;
+    border: 1px solid #58A0C8 !important;
+    transition: all 0.2s ease !important;
+}
+
+.job-item:hover {
+    background: rgba(88, 160, 200, 0.1) !important;
+    border-color: #FDF5AA !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.accuracy-bar {
+    height: 8px !important;
+    border-radius: 4px !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.accuracy-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #58A0C8, #FDF5AA);
+    border-radius: 4px;
+    transition: width 1s ease-out;
+}
+
+.status-chip {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid #58A0C8 !important;
+}
+
+.loading-spinner {
+    animation: spin 1s linear infinite;
+    margin-right: 8px;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.section-icon {
+    width: 48px;
+    height: 48px;
+    background: #34699A;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.MuiSelect-root {
+    color: white !important;
+}
+
+.MuiSelect-icon {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.MuiMenuItem-root {
+    background: #113F67 !important;
+    color: white !important;
+}
+
+.MuiMenuItem-root:hover {
+    background: #34699A !important;
+}
+
+.MuiPaper-root {
+    background: #113F67 !important;
+    border: 1px solid #58A0C8 !important;
+}
+
+.MuiListItemText-primary {
+    color: white !important;
+}
+
+.MuiListItemText-secondary {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 48px 24px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.empty-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(88, 160, 200, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    border: 2px dashed #58A0C8;
+}
