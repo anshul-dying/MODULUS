@@ -21,41 +21,41 @@
 \title{MODULUS: Interactive Web Application for Data Preprocessing and Automated Machine Learning Model Generation}
 
 \author{
-\IEEEauthorblockN{1\textsuperscript{st} Aarya Deshpande}
+\IEEEauthorblockN{1\textsuperscript{st} Zarina K. M.}
 \IEEEauthorblockA{\textit{Dept. of Artificial Intelligence and Data Science} \\
 \textit{Vishwakarma Institute of Technology, Pune} \\
 Pune, India \\
-12310717@vit.edu.in}
+zarinabegam.mundargi@vit.edu}
 \and
-\IEEEauthorblockN{2\textsuperscript{nd} Aashana Sonarkar}
+\IEEEauthorblockN{2\textsuperscript{nd} Aarya Deshpande}
 \IEEEauthorblockA{\textit{Dept. of Artificial Intelligence and Data Science} \\
 \textit{Vishwakarma Institute of Technology, Pune} \\
 Pune, India \\
-12310847@vit.edu.in}
+aarya.deshpande23@vit.edu}
 \and
-\IEEEauthorblockN{3\textsuperscript{rd} Duhazuhayr Ansari}
+\IEEEauthorblockN{3\textsuperscript{rd} Aashana Sonarkar}
 \IEEEauthorblockA{\textit{Dept. of Artificial Intelligence and Data Science} \\
 \textit{Vishwakarma Institute of Technology, Pune} \\
 Pune, India \\
-12310113@vit.edu.in}
+sonarkar.aashana23@vit.edu}
 \and
-\IEEEauthorblockN{4\textsuperscript{th} Anshul Khaire}
+\IEEEauthorblockN{4\textsuperscript{th} Duhazuhayr Ansari}
 \IEEEauthorblockA{\textit{Dept. of Artificial Intelligence and Data Science} \\
 \textit{Vishwakarma Institute of Technology, Pune} \\
 Pune, India \\
-12310127@vit.edu.in}
+duhazuhayr.ansari23@vit.edu}
 \and
-\IEEEauthorblockN{5\textsuperscript{th} Upamanyu Bhadane}
+\IEEEauthorblockN{5\textsuperscript{th} Anshul Khaire}
 \IEEEauthorblockA{\textit{Dept. of Artificial Intelligence and Data Science} \\
 \textit{Vishwakarma Institute of Technology, Pune} \\
 Pune, India \\
-12310824@vit.edu.in}
+anshul.khaire23@vit.edu.in}
 \and
-\IEEEauthorblockN{6\textsuperscript{th} Zarina K. M.}
+\IEEEauthorblockN{6\textsuperscript{th} Upamanyu Bhadane}
 \IEEEauthorblockA{\textit{Dept. of Artificial Intelligence and Data Science} \\
 \textit{Vishwakarma Institute of Technology, Pune} \\
 Pune, India \\
-zarina.km@vit.edu.in}
+upamanyu.bhadane23@vit.edu.in}
 }
 
 \begin{document}
@@ -127,23 +127,23 @@ The ML workflow is complex—building a model is more than running a training sc
   \item Inconsistent data quality assessment: Manual inspection fails to catch subtle data issues that affect model performance.
 \end{itemize}
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\linewidth]{figures/motivation_icons.png}
-  \caption{Motivation: Challenges in ML Workflow}
-  \label{fig:motivation}
-\end{figure}
+% \begin{figure}[t]
+%   \centering
+%   \includegraphics[width=\linewidth]{figures/motivation_icons.png}
+%   \caption{Motivation: Challenges in ML Workflow}
+%   \label{fig:motivation}
+% \end{figure}
 
 Training and operationalizing ML models involves multiple manual, repetitive, and error-prone steps: data cleaning, feature engineering, algorithm tuning, evaluation, reproducibility, and packaging. These tasks are time-consuming, hard to reproduce, and prone to inconsistencies. Traditional approaches require expertise in multiple domains: statistics for data analysis, programming for automation, and ML theory for model selection.
 
 Our solution provides a guided, standardized pipeline from dataset to model with reports and exportable artifacts, reducing time-to-first-model and improving consistency. The platform addresses the disconnect between domain expertise and technical implementation by providing an intuitive interface that abstracts away implementation details while preserving transparency and control.
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\linewidth]{figures/problem_diagram.png}
-  \caption{Problem Statement Diagram}
-  \label{fig:problem}
-\end{figure}
+% \begin{figure}[t]
+%   \centering
+%   \includegraphics[width=\linewidth]{figures/problem_diagram.png}
+%   \caption{Problem Statement Diagram}
+%   \label{fig:problem}
+% \end{figure}
 
 \section{Objectives}
 \label{sec:objectives}
@@ -165,7 +165,7 @@ MODULUS follows a microservices-based architecture with clear separation of conc
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\linewidth]{figures/system_architecture.png}
+  \includegraphics[width=\linewidth]{high_level_system_arch.png}
   \caption{High-level system architecture showing frontend, API routers, services, and storage layers.}
   \label{fig:architecture}
 \end{figure}
@@ -373,7 +373,7 @@ Reports: HTML reports with visualizations, metrics tables, model performance cha
 
 \section{Results and Evaluation}
 \label{sec:evaluation}
-We evaluate MODULUS through a combination of benchmarked ML workloads and a controlled user study. All experiments were executed on a workstation with an 8-core AMD Ryzen~7~5800X CPU, 32~GB RAM, and RTX~3070 GPU (GPU used only for image workloads). The backend was served via Uvicorn with workers pinned to CPU cores.
+We evaluate MODULUS through a combination of benchmarked ML workloads and a controlled user study. All experiments were executed on a workstation with an 12-core Intel i~5 12900~HX, 16~GB RAM, and RTX~300 GPU (GPU used only for image workloads). The backend was served via Uvicorn with workers pinned to CPU cores.
 
 \subsection{Experimental Setup}
 We selected three representative public datasets:
@@ -405,10 +405,10 @@ California Housing & $R^{2}$ & $0.842 \pm 0.012$ & $0.824 \pm 0.015$ & $-0.018$ 
 \label{tab:model_results}
 \end{table}
 
-\subsection{User Study}
-We conducted a within-subjects study with 25 participants (10 industry practitioners, 8 graduate students, 7 senior undergraduates). Each participant completed two workflows---one using a notebook template and one using MODULUS---across two datasets counterbalanced with a Latin square. Tasks included schema inspection, missing-value handling, model training, and report export. We recorded task completion time, error count, and System Usability Scale (SUS) scores.
+% \subsection{User Study}
+% We conducted a within-subjects study with 25 participants (10 industry practitioners, 8 graduate students, 7 senior undergraduates). Each participant completed two workflows---one using a notebook template and one using MODULUS---across two datasets counterbalanced with a Latin square. Tasks included schema inspection, missing-value handling, model training, and report export. We recorded task completion time, error count, and System Usability Scale (SUS) scores.
 
-Participants completed MODULUS workflows in $27.4 \pm 6.1$ minutes versus $72.0 \pm 14.5$ minutes for notebooks, yielding a 62\% reduction in time-to-first-model ($p < 0.001$, paired $t$-test). The mean SUS score for MODULUS was 81.6 (``excellent''), while notebooks scored 58.3 (``marginal''). Novice participants (students) particularly benefited from AI-generated suggestions, citing improved confidence in handling data quality issues. Manual overrides were used in 64\% of tasks, underscoring the importance of retaining fine-grained control.
+% Participants completed MODULUS workflows in $27.4 \pm 6.1$ minutes versus $72.0 \pm 14.5$ minutes for notebooks, yielding a 62\% reduction in time-to-first-model ($p < 0.001$, paired $t$-test). The mean SUS score for MODULUS was 81.6 (``excellent''), while notebooks scored 58.3 (``marginal''). Novice participants (students) particularly benefited from AI-generated suggestions, citing improved confidence in handling data quality issues. Manual overrides were used in 64\% of tasks, underscoring the importance of retaining fine-grained control.
 
 \subsection{System Performance}
 Table~\ref{tab:system_metrics} reports system-level measurements gathered via Locust load testing (120 virtual users) and application logs. Median API latency remained below 190~ms under load, and background training tasks completed within the expected envelope for the evaluated datasets. When LLM providers throttled requests, the fallback heuristic completed analyses in under 8~seconds, keeping the UI responsive.
@@ -431,7 +431,6 @@ Throughput (requests/min) & 910 & --- \\
 \label{tab:system_metrics}
 \end{table}
 
-System logs over a two-week soak test recorded 99.1\% uptime with no data-loss incidents. Error handling gracefully surfaced issues such as malformed CSV delimiters, and the persisted job registry allowed the dashboard to recover state after restarts.
 
 \section{Discussion and Limitations}
 \label{sec:discussion}
