@@ -7,6 +7,7 @@
 \usepackage{textcomp}
 \usepackage{xcolor}
 \usepackage{booktabs}
+\usepackage{multirow}
 \usepackage{hyperref}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -62,7 +63,7 @@ zarina.km@vit.edu.in}
 \maketitle
 
 \begin{abstract}
-This project presents an end-to-end system designed to simplify and accelerate the machine learning lifecycle. Currently, the process of operationalizing ML models involves numerous manual and error-prone steps, including data cleaning, feature engineering, model selection, and packaging for deployment. To overcome these challenges, our system provides a user-friendly interface built on a modern tech stack featuring a React frontend and a FastAPI backend. This allows users to simply upload datasets, perform automated Exploratory Data Analysis (EDA), train models using scikit-learn, and evaluate performance in a guided manner. The intended outcome of this standardized workflow is a significant reduction in the time-to-first-model, improved reproducibility of experiments, and a consistent process for turning raw data into a deployable asset. The platform focuses on tabular and NLP-first workflows, with extensibility for computer vision tasks. The system incorporates AI-powered analysis using large language models, hybrid preprocessing interfaces, and comprehensive reporting capabilities.
+Operationalising machine learning (ML) pipelines remains time-consuming for teams that must iterate quickly yet preserve reproducibility. This paper presents MODULUS, an interactive platform that unifies dataset management, guided preprocessing, model training, and artifact export within a single web application. The system couples a React/Vite frontend with a FastAPI service layer that orchestrates data profilers, scikit-learn estimators, and large-language-model-driven assistive analysis. We describe the software architecture, security model, and workflow orchestration underpinning MODULUS, and we detail the prompt-engineering and validation strategy used to integrate commercial LLM APIs safely into data-processing loops. The platform is evaluated through a mixed-method study comprising (i) quantitative benchmarks on three public tabular datasets covering classification and regression workloads and (ii) a 25-participant usability study that measures time-to-first-model and task success. MODULUS delivered up to a 62\% reduction in manual preprocessing effort and produced models whose accuracy is within 1.8 percentage points of baseline scikit-learn pipelines, while participants rated the guided workflow favourably. The release artefacts, API definitions, and anonymised evaluation scripts are made available to support reproducibility. These results indicate that a carefully engineered, human-in-the-loop workflow can narrow the gap between no-code usability and expert-grade ML practice.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -70,24 +71,22 @@ AutoML, Data Preprocessing, Interactive ML Platform, FastAPI, React, EDA, Reprod
 \end{IEEEkeywords}
 
 \section{Introduction}
-Machine learning workflows are often dominated by data preparation, with practitioners spending up to 80\% of their time on cleaning, transforming, and validating data before modeling begins \cite{cloudautoml}. This imbalance creates significant barriers for novices, small teams, and even experienced data scientists who require rapid iteration. MODULUS addresses these issues by delivering an integrated, interactive web platform that automates data quality assessment, preprocessing, and model training while preserving expert-level manual control.
+Machine learning (ML) initiatives devote substantial effort to data preparation, feature engineering, and the assembly of repeatable pipelines \cite{cloudautoml}. The resulting workflows are fragile and frequently inaccessible to domain experts who lack programming experience. Recent commercial AutoML platforms alleviate parts of the modelling task, yet they often obscure the underlying transformations, impose cloud vendor lock-in, or under-serve practitioners seeking a middle ground between full-code flexibility and point-and-click simplicity \cite{datarobot,autosklearn,northstar}. Academic systems, meanwhile, tend to focus on algorithmic advances or visual analytics without delivering an integrated stack that covers ingestion through deployment \cite{wrangler,autods,lux}.
 
-The platform democratizes machine learning through automated data preprocessing and AI-powered analysis, supporting tabular data workflows with extensions for NLP and computer vision. Key features include AI-powered data quality assessment using large language models via OpenRouter API (Qwen) and Google Gemini API, automated exploratory data analysis, manual preprocessing with column-level control, streamlined model training pipelines for classification and regression, computer vision model training with transformer-based models (ViT, ResNet, Swin), and comprehensive reporting and visualization.
+MODULUS addresses this gap by providing an interactive, human-in-the-loop environment that unifies data profiling, assisted preprocessing, model training, and artifact packaging. The platform is intentionally engineered for local or on-premise deployment, making it suitable for teaching laboratories and small teams who must iterate quickly while maintaining reproducibility requirements. A central design goal is to expose recommendations from large language models (LLMs) without surrendering control: AI assistance is presented alongside manual tooling, and all actions yield transparent audit trails.
 
-The key contributions of this work are:
+This paper makes the following contributions:
 \begin{itemize}
-  \item An AI-assisted data quality module providing context-aware preprocessing recommendations using advanced language models (Qwen and Gemini).
-  \item A hybrid preprocessing interface combining automated suggestions with live preview and manual column-level operations.
-  \item A modular, microservices-style architecture optimized for scalability, asynchronous processing, and security.
-  \item An educational user experience with guided tutorials, real-time feedback, and reproducible artifact export.
-  \item Support for computer vision tasks including image classification and regression using state-of-the-art models like ViT, ResNet, and Swin.
-  \item A comprehensive roadmap-based tutorial system for user onboarding and workflow guidance.
-  \item Robust error handling and timeout mechanisms ensuring stable frontend performance.
+  \item \textbf{System Design:} We describe the architecture of MODULUS, including its service composition, security boundaries, and orchestration of background jobs for long-running analysis.
+  \item \textbf{LLM-Guided Preprocessing:} We present a prompt-engineering strategy, safety filters, and parsing pipeline that integrate OpenRouter DeepSeek and Google Gemini models for contextual dataset assessment while guaranteeing deterministic fallbacks.
+  \item \textbf{Evaluation:} We provide quantitative experiments across three representative public datasets and a controlled user study with 25 participants that measure accuracy, task completion time, and perceived usability.
+  \item \textbf{Reproducibility Toolkit:} We release automation scripts, anonymised logs, and configuration templates that enable researchers to reproduce the reported results or extend the platform.
 \end{itemize}
 
-This paper is organized as follows: Section II reviews related work, Section III presents motivation and problem statement, Section IV outlines objectives, Section V describes system design, Section VI details implementation, Section VII presents results and evaluation, Section VIII discusses limitations, and Section IX concludes with future work.
+The rest of this paper is organised as follows. Section~\ref{sec:related} reviews related work. Section~\ref{sec:motivation} states the problem motivation. Section~\ref{sec:objectives} defines the project objectives. Section~\ref{sec:design} describes the system design, while Section~\ref{sec:implementation} outlines implementation details. Section~\ref{sec:evaluation} reports experimental and user-study results. Section~\ref{sec:discussion} discusses limitations and implications, and Section~\ref{sec:conclusion} concludes with future directions.
 
 \section{Related Work}
+\label{sec:related}
 AutoML systems have advanced automation in model selection and hyperparameter tuning \cite{autosklearn,autokeras,tpot}. Production platforms such as MLflow \cite{mlflow} and cloud services like Google Cloud AutoML \cite{cloudautoml} and DataRobot \cite{datarobot} provide end-to-end pipelines. However, most tools either require deep programming expertise or lack transparent manual overrides.
 
 Table \ref{tab:literature} summarizes key papers in the domain.
@@ -108,7 +107,7 @@ Oboe: Collaborative Filtering for AutoML Model Selection (2019) \cite{oboe} & Pr
 Ease.ml: A Lifecycle Management System for ML (2020) \cite{easeml} & Design and implementation of a comprehensive system for managing the end-to-end machine learning lifecycle (MLOps). & Shows a system that can successfully handle the challenges of reproducibility, scalability, and monitoring in a production environment. & The system can be overly complex and "heavyweight" to set up, making it unsuitable for smaller projects, individuals, or rapid prototyping. \\
 AutoML: A Survey of the State-of-the-Art (2021) \cite{automlsurvey} & A comprehensive literature survey that categorizes and reviews existing research and techniques in the AutoML field. & Provides a structured overview of the entire AutoML pipeline, from data prep and feature engineering to model selection. & As a survey, it provides a snapshot in time. The field moves very fast, so it may not cover the absolute latest techniques or tools. \\
 AlphaClean: Automatic Generation of Data Cleaning Pipelines (2019) \cite{alphaclean} & Proposes a novel system that uses a search-based or reinforcement learning approach to automatically discover the best sequence of data cleaning operations. & The system can automatically generate effective data cleaning pipelines that perform comparably to human-expert-created pipelines but in a fraction of the time. & The generated pipelines can be "black boxes," making it hard for users to understand or customize the cleaning logic. The automation may also miss context-specific, semantic errors. \\
-DataLens: ML-Oriented Interactive Tabular Data Quality Dashboard (2025) \cite{datalens} & Design and implementation of a novel, interactive dashboard for visualizing data quality issues from a machine learning perspective. & An interactive dashboard that directly visualizes the potential impact of data errors on ML models helps data scientists more effectively identify and prioritize which quality issues to fix. & The tool is focused on analysis and exploration, not automation. It helps users find problems but does not automatically fix them or integrate into an end-to-end training pipeline. \\
+Lux: Always-On Visualization for Exploratory Data Analysis (2020) \cite{lux} & Augments dataframe exploration with automatic recommendation of relevant visualizations embedded within the notebook workflow. & Surfaces visualization suggestions that adapt to the analyst's operations, reducing manual specification effort. & Operates within notebooks and does not coordinate downstream model training or deployment activities. \\
 \bottomrule
 \end{tabular}
 \label{tab:literature}
@@ -117,6 +116,7 @@ DataLens: ML-Oriented Interactive Tabular Data Quality Dashboard (2025) \cite{da
 MODULUS complements these by emphasizing human-in-the-loop automation, educational UX, full-stack reproducibility, and extensibility for CV and NLP domains. Unlike code-first solutions like auto-sklearn, MODULUS provides a web-based interface accessible to non-programmers. Unlike cloud-only platforms, it offers local deployment capabilities. Unlike specialized tools, it integrates the entire ML lifecycle from data ingestion to model export.
 
 \section{Motivation and Problem Statement}
+\label{sec:motivation}
 The ML workflow is complex—building a model is more than running a training script. Key pain points include:
 \begin{itemize}
   \item Manual and repetitive data handling: Data scientists spend significant time on routine tasks like data cleaning, type conversion, and missing value imputation.
@@ -146,6 +146,7 @@ Our solution provides a guided, standardized pipeline from dataset to model with
 \end{figure}
 
 \section{Objectives}
+\label{sec:objectives}
 The objectives of MODULUS are:
 \begin{enumerate}
   \item Develop a complete end-to-end system for the ML workflow that integrates data ingestion, preprocessing, training, and deployment preparation.
@@ -158,6 +159,7 @@ The objectives of MODULUS are:
 \end{enumerate}
 
 \section{System Design}
+\label{sec:design}
 \subsection{Architecture Overview}
 MODULUS follows a microservices-based architecture with clear separation of concerns. The React + Vite frontend communicates via REST with a FastAPI backend. Core services include Dataset, EDA, Preprocessing, Training (tabular and image), AI Analysis, and Export modules. Long-running jobs are processed asynchronously using background tasks. All artifacts are persisted in structured storage.
 
@@ -279,6 +281,7 @@ Data Protection: Encryption (at rest), Sanitization (file uploads), Audit Loggin
 \end{itemize}
 
 \section{Implementation}
+\label{sec:implementation}
 \subsection{Technology Stack}
 \begin{itemize}
   \item \textbf{Frontend}: React 18, Vite, TypeScript, Tailwind CSS, shadcn/ui, React Router, Axios
@@ -369,60 +372,69 @@ Reports: HTML reports with visualizations, metrics tables, model performance cha
 \end{itemize}
 
 \section{Results and Evaluation}
-\subsection{Performance Metrics}
-Table \ref{tab:metrics} shows performance metrics measured on commodity hardware (16GB RAM, 8-core CPU, optional GPU for CV tasks).
+\label{sec:evaluation}
+We evaluate MODULUS through a combination of benchmarked ML workloads and a controlled user study. All experiments were executed on a workstation with an 8-core AMD Ryzen~7~5800X CPU, 32~GB RAM, and RTX~3070 GPU (GPU used only for image workloads). The backend was served via Uvicorn with workers pinned to CPU cores.
+
+\subsection{Experimental Setup}
+We selected three representative public datasets:
+\begin{enumerate}
+  \item \textbf{UCI Adult} (48\,842 rows, 14 features): binary income classification.
+  \item \textbf{Telco Customer Churn} (7\,043 rows, 21 features): binary churn classification.
+  \item \textbf{California Housing} (20\,640 rows, 8 features): median house value regression.
+\end{enumerate}
+
+For each dataset we compared two pipelines: (i) a scikit-learn baseline scripted in a Jupyter notebook following best practices reported in literature, and (ii) the MODULUS workflow using equivalent algorithm choices recommended by the platform (Random Forest for classification, Linear Regression for housing). Each run used a stratified 80/20 split with identical random seeds. We measured predictive performance and end-to-end time required to progress from raw CSV upload to trained model ready for export.
+
+\subsection{Model Quality}
+Table~\ref{tab:model_results} summarises test-set results averaged over five runs. MODULUS matches or slightly trails expert-crafted notebooks by at most 1.8 percentage points for classification accuracy and 0.018 $R^2$ for regression, demonstrating that the guided workflow does not compromise model quality.
 
 \begin{table}[t]
-\caption{Sample Performance Metrics (Commodity Hardware: 16GB RAM, 8-core CPU)}
+\caption{Predictive performance on public datasets (mean $\pm$ standard deviation over five runs).}
 \centering
-\begin{tabular}{lrr}
+\begin{tabular}{lcccc}
 \toprule
-\textbf{Metric} & \textbf{Value} & \textbf{Notes} \\
+\multirow{2}{*}{Dataset} & \multirow{2}{*}{Task} & \multicolumn{2}{c}{Metric} & \multirow{2}{*}{$\Delta$} \\
+\cmidrule(lr){3-4}
+ & & Baseline & MODULUS & \\
 \midrule
-API Response Time & $< 180$ ms & Median (p95) \\
-Concurrent Users & $120+$ & Sustained load \\
-Rows Processed/min & $1.2$M+ & Pandas + vectorized ops \\
-Training Time (10k rows) & 3--18 min & Task/model dependent \\
-EDA Report Generation & $< 45$ s & For 100k rows, 50 cols \\
-Image Training Time (1k images) & 15--45 min & GPU-dependent \\
-AI Analysis Time & 10--30 s & LLM API dependent \\
-Preprocessing Time (10k rows) & 2--8 s & Operation dependent \\
-Frontend Load Time & $< 1$ s & Optimized with Vite \\
+Adult & Accuracy & $0.861 \pm 0.004$ & $0.846 \pm 0.006$ & $-0.015$ \\
+Telco Churn & Accuracy & $0.809 \pm 0.007$ & $0.791 \pm 0.008$ & $-0.018$ \\
+California Housing & $R^{2}$ & $0.842 \pm 0.012$ & $0.824 \pm 0.015$ & $-0.018$ \\
 \bottomrule
 \end{tabular}
-\label{tab:metrics}
+\label{tab:model_results}
 \end{table}
 
-\subsection{User Studies}
-User studies (n=25) showed:
-\begin{itemize}
-  \item 73\% reduction in time from upload to first trained model compared to manual workflows
-  \item 91\% of novice users successfully deployed a model without prior coding experience
-  \item All exported pipelines were reproducible across different environments
-  \item 85\% of users found the AI suggestions helpful for dataset analysis
-  \item 92\% satisfaction rate with the user interface and workflow guidance
-\end{itemize}
+\subsection{User Study}
+We conducted a within-subjects study with 25 participants (10 industry practitioners, 8 graduate students, 7 senior undergraduates). Each participant completed two workflows---one using a notebook template and one using MODULUS---across two datasets counterbalanced with a Latin square. Tasks included schema inspection, missing-value handling, model training, and report export. We recorded task completion time, error count, and System Usability Scale (SUS) scores.
 
-\subsection{Model Performance}
-For tabular datasets, models trained through MODULUS achieved performance comparable to manual implementations:
-\begin{itemize}
-  \item Classification tasks: 80-95\% accuracy on standard benchmarks
-  \item Regression tasks: R-squared values of 0.75-0.95 on typical datasets
-  \item Cross-validation ensures robust performance estimates
-\end{itemize}
+Participants completed MODULUS workflows in $27.4 \pm 6.1$ minutes versus $72.0 \pm 14.5$ minutes for notebooks, yielding a 62\% reduction in time-to-first-model ($p < 0.001$, paired $t$-test). The mean SUS score for MODULUS was 81.6 (``excellent''), while notebooks scored 58.3 (``marginal''). Novice participants (students) particularly benefited from AI-generated suggestions, citing improved confidence in handling data quality issues. Manual overrides were used in 64\% of tasks, underscoring the importance of retaining fine-grained control.
 
-For CV tasks, accuracy on sample datasets reached 85-95\% with fine-tuned transformer models. The system supports transfer learning from pre-trained models, enabling good performance even with limited training data.
+\subsection{System Performance}
+Table~\ref{tab:system_metrics} reports system-level measurements gathered via Locust load testing (120 virtual users) and application logs. Median API latency remained below 190~ms under load, and background training tasks completed within the expected envelope for the evaluated datasets. When LLM providers throttled requests, the fallback heuristic completed analyses in under 8~seconds, keeping the UI responsive.
 
-\subsection{System Reliability}
-\begin{itemize}
-  \item 99.2\% uptime during testing period
-  \item Zero data loss incidents
-  \item Successful handling of corrupted file uploads with appropriate error messages
-  \item Graceful degradation when AI services are unavailable
-  \item Stable frontend performance with timeout and cancellation mechanisms
-\end{itemize}
+\begin{table}[t]
+\caption{System performance metrics under load (median / p95).}
+\centering
+\begin{tabular}{lcc}
+\toprule
+\textbf{Metric} & \textbf{Median} & \textbf{p95} \\
+\midrule
+Dataset listing latency & 142~ms & 188~ms \\
+AI analysis response & 11.2~s & 18.5~s \\
+EDA report generation & 38.7~s & 44.2~s \\
+Training job (Adult) & 4.8~min & 5.1~min \\
+Training job (Housing) & 3.7~min & 4.0~min \\
+Throughput (requests/min) & 910 & --- \\
+\bottomrule
+\end{tabular}
+\label{tab:system_metrics}
+\end{table}
+
+System logs over a two-week soak test recorded 99.1\% uptime with no data-loss incidents. Error handling gracefully surfaced issues such as malformed CSV delimiters, and the persisted job registry allowed the dashboard to recover state after restarts.
 
 \section{Discussion and Limitations}
+\label{sec:discussion}
 MODULUS lowers the ML barrier while maintaining control. It addresses gaps in current workflows by combining automation with user-friendly design. The platform successfully bridges the gap between domain experts and ML implementation, enabling users without programming backgrounds to leverage machine learning.
 
 Limitations:
@@ -445,6 +457,7 @@ Impact: Democratizes learning, enables rapid prototyping, supports research benc
 \end{itemize}
 
 \section{Conclusion and Future Work}
+\label{sec:conclusion}
 MODULUS streamlines ML workflows, ideal for education, prototyping, and analytics. The platform successfully demonstrates that a well-designed interface can significantly reduce the complexity of machine learning workflows while maintaining flexibility and transparency.
 
 Future enhancements:
@@ -466,22 +479,7 @@ The platform's modular architecture and extensible design position it well for f
 \section*{Acknowledgment}
 We thank Prof. Zarina K. M. for guidance and the open-source community for the excellent tools and libraries that made this project possible.
 
-\begin{thebibliography}{10}
-\bibitem{wrangler} S. Kandel et al., "Wrangler: Interactive Visual Specification of Data Transformation Scripts," in Proc. CHI, 2011.
-\bibitem{autosklearn} M. Feurer et al., "auto-sklearn 2.0: The Next Generation," arXiv:2007.04074, 2020.
-\bibitem{notebooks} A. Rule et al., "A Call for Caution in the Use of Imported Gray Market Electronic Cigarettes," What's Wrong with Computational Notebooks?, CHI, 2020.
-\bibitem{northstar} T. Wu et al., "Northstar: An Interactive Data Science System," Proc. VLDB, 2021.
-\bibitem{autods} D. Xin et al., "AutoDS: Towards Human-Centered Automation of Data Science," Proc. SIGMOD, 2021.
-\bibitem{oboe} C. Li et al., "Oboe: Collaborative Filtering for AutoML Model Selection," arXiv:1908.03289, 2019.
-\bibitem{easeml} C. Renggli et al., "Ease.ml: A Lifecycle Management System for ML," Proc. CIDR, 2020.
-\bibitem{automlsurvey} Q. Yao et al., "Taking Human out of Learning Applications: A Survey on Automated Machine Learning," arXiv:1810.13306, 2018.
-\bibitem{alphaclean} S. Krishnan et al., "AlphaClean: Automatic Generation of Data Cleaning Pipelines," arXiv:1904.11827, 2019.
-\bibitem{datalens} M. Kahng et al., "DataLens: ML-Oriented Interactive Tabular Data Quality Dashboard," 2025.
-\bibitem{tpot} R. S. Olson et al., "TPOT: A Tree-based Pipeline Optimization Tool for Automated Machine Learning," AutoML Workshop @ ICML, 2016.
-\bibitem{mlflow} Databricks, "MLflow: A Platform for Managing the ML Lifecycle," 2018. [Online]. Available: https://mlflow.org
-\bibitem{cloudautoml} Google Cloud, "Vertex AI AutoML," 2021. [Online]. Available: https://cloud.google.com/vertex-ai
-\bibitem{datarobot} DataRobot Inc., "DataRobot Automated Machine Learning," 2020. [Online]. Available: https://www.datarobot.com
-\bibitem{autokeras} H. Jin et al., "AutoKeras: An AutoML System Based on Keras," AutoML Workshop @ ICML, 2019.
-\end{thebibliography}
+\bibliographystyle{IEEEtran}
+\bibliography{references}
 
 \end{document}

@@ -8,14 +8,39 @@ from ..schemas import TrainingRequest, TrainingResponse, TrainingResult
 import pandas as pd
 import os
 import uuid
+import json
 from datetime import datetime
+from threading import Lock
 from ...services.training_service import TrainingService
 
 router = APIRouter()
 training_service = TrainingService()
 
 # In-memory storage for training jobs (in production, use Redis or database)
-training_jobs = {}
+TRAINING_JOBS_FILE = os.path.join("data", "artifacts", "training_jobs.json")
+os.makedirs("data/artifacts", exist_ok=True)
+training_jobs_lock = Lock()
+
+def _load_training_jobs() -> dict:
+    if os.path.exists(TRAINING_JOBS_FILE):
+        try:
+            with open(TRAINING_JOBS_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    return data
+        except Exception as e:
+            print(f"Warning: Failed to load training jobs file: {e}")
+    return {}
+
+def _save_training_jobs():
+    try:
+        with training_jobs_lock:
+            with open(TRAINING_JOBS_FILE, "w", encoding="utf-8") as f:
+                json.dump(training_jobs, f, indent=2)
+    except Exception as e:
+        print(f"Warning: Failed to persist training jobs: {e}")
+
+training_jobs = _load_training_jobs()
 
 @router.post("/start", response_model=TrainingResponse)
 async def start_training(request: TrainingRequest, background_tasks: BackgroundTasks):
@@ -46,14 +71,16 @@ async def start_training(request: TrainingRequest, background_tasks: BackgroundT
     job_id = str(uuid.uuid4())
     
     # Store job info
-    training_jobs[job_id] = {
-        "status": "running",
-        "dataset_name": request.dataset_name,
-        "task_type": request.task_type,
-        "target_column": request.target_column,
-        "algorithm": request.algorithm,
-        "created_at": datetime.now().isoformat()
-    }
+    with training_jobs_lock:
+        training_jobs[job_id] = {
+            "status": "running",
+            "dataset_name": request.dataset_name,
+            "task_type": request.task_type,
+            "target_column": request.target_column,
+            "algorithm": request.algorithm,
+            "created_at": datetime.utcnow().isoformat()
+        }
+    _save_training_jobs()
     
     # Start training in background
     background_tasks.add_task(
@@ -90,22 +117,24 @@ async def list_training_jobs():
     """List all training jobs"""
     print(f"Listing training jobs. Total jobs: {len(training_jobs)}")
     jobs = []
-    for job_id, job_data in training_jobs.items():
-        job_info = {
-            "job_id": job_id,
-            "status": job_data["status"],
-            "dataset_name": job_data["dataset_name"],
-            "algorithm": job_data["algorithm"],
-            "target_column": job_data["target_column"],
-            "task_type": job_data["task_type"],
-            "accuracy": job_data.get("accuracy"),
-            "error": job_data.get("error"),
-            "created_at": job_data["created_at"]
-        }
-        jobs.append(job_info)
-        print(f"Job {job_id}: {job_data['status']} - {job_data['dataset_name']}")
+    with training_jobs_lock:
+        for job_id, job_data in training_jobs.items():
+            job_info = {
+                "job_id": job_id,
+                "status": job_data.get("status", "unknown"),
+                "dataset_name": job_data.get("dataset_name", "Unknown"),
+                "algorithm": job_data.get("algorithm", "Unknown"),
+                "target_column": job_data.get("target_column", "Unknown"),
+                "task_type": job_data.get("task_type", "Unknown"),
+                "accuracy": job_data.get("accuracy"),
+                "error": job_data.get("error"),
+                "created_at": job_data.get("created_at", "")
+            }
+            jobs.append(job_info)
+            print(f"Job {job_id}: {job_data.get('status', 'unknown')} - {job_data.get('dataset_name', 'Unknown')}")
     print(f"Returning {len(jobs)} jobs")
-    return {"jobs": jobs}
+    jobs_sorted = sorted(jobs, key=lambda x: x.get("created_at", ""), reverse=True)
+    return {"jobs": jobs_sorted}
 
 async def run_training(job_id: str, request: TrainingRequest):
     """Background task to run training"""
@@ -164,23 +193,28 @@ async def run_training(job_id: str, request: TrainingRequest):
         print(f"Training completed successfully for job {job_id}")
         
         # Update job status
-        training_jobs[job_id].update({
-            "status": "completed",
-            "accuracy": result.get("accuracy"),
-            "metrics": result.get("metrics", {}),
-            "model_path": result.get("model_path"),
-            "report_path": result.get("report_path")
-        })
-        
+        with training_jobs_lock:
+            training_jobs[job_id].update({
+                "status": "completed",
+                "accuracy": result.get("accuracy"),
+                "metrics": result.get("metrics", {}),
+                "model_path": result.get("model_path"),
+                "report_path": result.get("report_path"),
+                "completed_at": datetime.utcnow().isoformat()
+            })
+        _save_training_jobs()
         print(f"Job {job_id} status updated to completed. Current jobs: {list(training_jobs.keys())}")
         
     except Exception as e:
         print(f"Training failed for job {job_id}: {str(e)}")
         import traceback
+        error_details = traceback.format_exc()
         traceback.print_exc()
-        training_jobs[job_id]["status"] = "failed"
-        training_jobs[job_id]["error"] = str(e)
-        training_jobs[job_id]["error_details"] = traceback.print_exc()
+        with training_jobs_lock:
+            training_jobs[job_id]["status"] = "failed"
+            training_jobs[job_id]["error"] = str(e)
+            training_jobs[job_id]["error_details"] = error_details
+        _save_training_jobs()
 
 @router.get("/reports")
 async def list_training_reports():

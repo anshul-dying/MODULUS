@@ -1,4 +1,5 @@
 # MODULUS - Project Presentation
+
 ## Interactive Web Application for Data Preprocessing and Automated Machine Learning
 
 ---
@@ -6,11 +7,13 @@
 ## Slide 1: Title Slide
 
 # 🚀 MODULUS
+
 ## Interactive Web Application for Data Preprocessing and Automated Machine Learning
 
 **Team Members:**
+
 - Aarya Deshpande
-- Aashana Sonarkar  
+- Aashana Sonarkar
 - Duhazuhayr Ansari
 - Anshul Khaire
 - Upamanyu Bhadane
@@ -32,6 +35,7 @@ pie title Time Spent in ML Workflow
 ```
 
 **Key Pain Points:**
+
 - ⏱️ **80% of time** spent on data cleaning
 - 🐛 **Error-prone** manual transformations
 - 📝 **Lack of reproducibility**
@@ -47,19 +51,20 @@ pie title Time Spent in ML Workflow
 ```mermaid
 graph LR
     Problem["❌ Complex<br/>ML Workflow"] --> Solution["✅ MODULUS<br/>Simplified Platform"]
-    
+
     Solution --> Benefits["🎯 Benefits"]
-    
+
     Benefits --> B1["⚡ Fast"]
     Benefits --> B2["🎓 Easy"]
     Benefits --> B3["🔄 Reproducible"]
     Benefits --> B4["🤖 AI-Powered"]
-    
+
     style Solution fill:#c8e6c9
     style Benefits fill:#fff9c4
 ```
 
 **What MODULUS Does:**
+
 - Automates data preprocessing
 - Provides AI-powered suggestions
 - Trains models with one click
@@ -112,34 +117,34 @@ graph TB
     subgraph User["👤 User"]
         Browser["Web Browser"]
     end
-    
+
     subgraph Frontend["💻 Frontend"]
         React["React 18 + Vite"]
         UI["Modern UI"]
     end
-    
+
     subgraph Backend["⚙️ Backend"]
         FastAPI["FastAPI"]
         Services["7 Core Services"]
     end
-    
+
     subgraph AI["🤖 AI Services"]
         OpenRouter["OpenRouter"]
         Gemini["Gemini"]
     end
-    
+
     subgraph Storage["💾 Storage"]
         Files["File System"]
         Models["Models"]
         Reports["Reports"]
     end
-    
+
     Browser --> React
     React --> FastAPI
     FastAPI --> Services
     Services --> AI
     Services --> Storage
-    
+
     style User fill:#e1f5ff
     style Frontend fill:#fff4e1
     style Backend fill:#e8f5e9
@@ -161,29 +166,29 @@ graph LR
         Tailwind["Tailwind CSS"]
         Vite["Vite"]
     end
-    
+
     subgraph BackendStack["Backend"]
         FastAPI["FastAPI"]
         Python["Python 3.10+"]
         Uvicorn["Uvicorn"]
     end
-    
+
     subgraph MLStack["Machine Learning"]
         SKLearn["scikit-learn"]
         Pandas["pandas"]
         PyTorch["PyTorch"]
     end
-    
+
     subgraph AIStack["AI"]
         OpenRouter["OpenRouter"]
         Gemini["Gemini"]
         LangChain["LangChain"]
     end
-    
+
     FrontendStack --> BackendStack
     BackendStack --> MLStack
     BackendStack --> AIStack
-    
+
     style FrontendStack fill:#e1f5ff
     style BackendStack fill:#fff4e1
     style MLStack fill:#e8f5e9
@@ -229,23 +234,24 @@ journey
 flowchart LR
     Dataset[Dataset] --> AI[AI Analysis]
     AI --> Suggestions[Suggestions]
-    
+
     Suggestions --> S1[Target Columns]
     Suggestions --> S2[Algorithms]
     Suggestions --> S3[Quality Score]
     Suggestions --> S4[Preprocessing Steps]
-    
+
     S1 --> Display[Display in UI]
     S2 --> Display
     S3 --> Display
     S4 --> Display
-    
+
     style AI fill:#fff9c4
     style Suggestions fill:#e1f5ff
     style Display fill:#c8e6c9
 ```
 
 **AI Capabilities:**
+
 - 📊 **Target Column Recommendations** with confidence scores
 - 🎯 **Algorithm Suggestions** for each target
 - ⭐ **Data Quality Scoring** (1-10 scale)
@@ -262,25 +268,26 @@ flowchart LR
 graph TB
     Dataset[Dataset] --> AI[AI Analysis]
     Dataset --> Manual[Manual Mode]
-    
+
     AI --> Suggestions[AI Suggestions]
     Suggestions --> Review[User Review]
-    
+
     Manual --> Operations[Manual Operations]
     Operations --> Preview[Live Preview]
-    
+
     Review --> Apply[Apply Operations]
     Preview --> Apply
-    
+
     Apply --> Processed[Processed Dataset]
     Processed --> Report[Generate Report]
-    
+
     style AI fill:#fff9c4
     style Manual fill:#e1f5ff
     style Processed fill:#c8e6c9
 ```
 
 **Supported Operations:**
+
 - ✅ Drop columns
 - ✅ Type conversion
 - ✅ Missing value handling (mean, median, mode, fill)
@@ -305,7 +312,7 @@ graph LR
         T5[Linear Regression]
         T6[SVM]
     end
-    
+
     subgraph CV["Computer Vision"]
         C1[Image Classification]
         C2[Image Regression]
@@ -313,13 +320,13 @@ graph LR
         C4[ResNet]
         C5[Swin]
     end
-    
+
     Tabular --> Algorithms[Training]
     CV --> Algorithms
-    
+
     Algorithms --> Evaluation[Evaluation]
     Evaluation --> Export[Export]
-    
+
     style Tabular fill:#e1f5ff
     style CV fill:#fff4e1
     style Evaluation fill:#e8f5e9
@@ -340,7 +347,7 @@ graph TB
         P4["Training: 3-18 min"]
         P5["EDA: < 45s"]
     end
-    
+
     subgraph Results["User Study Results"]
         R1["73% Time Reduction"]
         R2["91% Success Rate"]
@@ -348,10 +355,10 @@ graph TB
         R4["85% AI Helpfulness"]
         R5["92% Satisfaction"]
     end
-    
+
     Performance --> Impact[Impact]
     Results --> Impact
-    
+
     style Performance fill:#fff9c4
     style Results fill:#c8e6c9
     style Impact fill:#e1f5ff
@@ -366,7 +373,7 @@ graph TB
 ```mermaid
 graph TB
     UI[User Interface] --> Features[Features]
-    
+
     Features --> F1[Dashboard with Statistics]
     Features --> F2[Roadmap Tutorial System]
     Features --> F3[Real-time Job Monitoring]
@@ -374,12 +381,13 @@ graph TB
     Features --> F5[Keyboard Shortcuts]
     Features --> F6[Dark Mode Support]
     Features --> F7[Responsive Design]
-    
+
     style UI fill:#e1f5ff
     style Features fill:#fff9c4
 ```
 
 **UI Highlights:**
+
 - 📊 Interactive dashboard with live stats
 - 🗺️ Roadmap-based tutorial for onboarding
 - ⌨️ Keyboard shortcuts for power users
@@ -403,7 +411,7 @@ graph LR
         F5[Reports]
         F6[Help]
     end
-    
+
     subgraph Backend["Backend Services"]
         B1[Dataset Service]
         B2[Preprocessing Service]
@@ -412,9 +420,9 @@ graph LR
         B5[AI Analysis Service]
         B6[Export Service]
     end
-    
+
     Frontend --> Backend
-    
+
     style Frontend fill:#e1f5ff
     style Backend fill:#fff4e1
 ```
@@ -434,7 +442,7 @@ flowchart LR
     Train --> Evaluate[📈 Evaluate]
     Evaluate --> Export[📦 Export]
     Export --> Deploy[🚀 Deploy]
-    
+
     style Upload fill:#e1f5ff
     style Validate fill:#fff9c4
     style EDA fill:#e8f5e9
@@ -460,7 +468,7 @@ graph TB
         S4[File Type Check]
         S5[Encryption]
     end
-    
+
     subgraph Scalability["Scalability"]
         Sc1[Stateless Services]
         Sc2[Async Processing]
@@ -468,10 +476,10 @@ graph TB
         Sc4[Caching]
         Sc5[Load Balancing]
     end
-    
+
     Security --> System[System]
     Scalability --> System
-    
+
     style Security fill:#ffcdd2
     style Scalability fill:#c8e6c9
     style System fill:#e1f5ff
@@ -491,21 +499,22 @@ graph LR
         T3[Error-Prone]
         T4[Requires Expertise]
     end
-    
+
     subgraph MODULUS["✅ MODULUS"]
         M1[Guided Interface]
         M2[Days to Hours]
         M3[Automated]
         M4[No-Code Required]
     end
-    
+
     Traditional -->|Transformation| MODULUS
-    
+
     style Traditional fill:#ffcdd2
     style MODULUS fill:#c8e6c9
 ```
 
 **Key Improvements:**
+
 - ⚡ **73% faster** time-to-model
 - 🎓 **91% success rate** for novices
 - 🔄 **100% reproducible** pipelines
@@ -547,18 +556,19 @@ mindmap
 ```mermaid
 graph LR
     Current[Current Features] --> Future[Future Enhancements]
-    
+
     Future --> F1[Cloud Deployment]
     Future --> F2[Collaboration]
     Future --> F3[Advanced Analytics]
     Future --> F4[AutoML Tuning]
     Future --> F5[Model Serving]
-    
+
     style Current fill:#c8e6c9
     style Future fill:#fff9c4
 ```
 
 **Planned Features:**
+
 - ☁️ Cloud deployment (Kubernetes, S3)
 - 👥 Multi-user collaboration
 - 📊 Advanced analytics & interpretability
@@ -572,26 +582,31 @@ graph LR
 ### 🎬 Key Features Demo
 
 **1. Dashboard**
+
 - Real-time statistics
 - Roadmap tutorial
 - Recent jobs overview
 
 **2. Dataset Management**
+
 - Upload & preview
 - AI analysis
 - Metadata extraction
 
 **3. Preprocessing**
+
 - AI suggestions
 - Manual operations
 - Live preview
 
 **4. Training**
+
 - One-click training
 - Real-time monitoring
 - Comprehensive reports
 
 **5. Reports**
+
 - EDA reports
 - Training reports
 - Export packages
@@ -611,6 +626,7 @@ pie title Impact Metrics
 ```
 
 **Impact Summary:**
+
 - ✅ **Democratized ML** - Makes ML accessible to non-experts
 - ✅ **Faster Development** - Reduces time-to-model by 73%
 - ✅ **Better Quality** - AI-powered suggestions improve results
@@ -627,22 +643,22 @@ pie title Impact Metrics
 graph TB
     User[👤 User] --> Frontend[💻 React Frontend]
     Frontend --> API[⚙️ FastAPI Backend]
-    
+
     API --> Services[🔧 Services]
-    
+
     Services --> S1[Dataset]
     Services --> S2[Preprocessing]
     Services --> S3[Training]
     Services --> S4[EDA]
     Services --> S5[AI Analysis]
     Services --> S6[Export]
-    
+
     S5 --> AI[🤖 AI Services]
     AI --> OpenRouter[OpenRouter]
     AI --> Gemini[Gemini]
-    
+
     Services --> Storage[💾 Storage]
-    
+
     style User fill:#e1f5ff
     style Frontend fill:#fff4e1
     style API fill:#e8f5e9
@@ -664,23 +680,23 @@ graph LR
         FastAPI["FastAPI"]
         TypeScript["TypeScript"]
     end
-    
+
     subgraph AI["AI Integration"]
         LLM["Large Language Models"]
         Structured["Structured Prompts"]
         Fallback["Fallback Mechanisms"]
     end
-    
+
     subgraph ML["ML Capabilities"]
         Tabular["Tabular ML"]
         CV["Computer Vision"]
         Multiple["Multiple Algorithms"]
     end
-    
+
     Modern --> Innovation[Innovation]
     AI --> Innovation
     ML --> Innovation
-    
+
     style Modern fill:#e1f5ff
     style AI fill:#fff9c4
     style ML fill:#e8f5e9
@@ -696,19 +712,20 @@ graph LR
 ```mermaid
 graph TB
     UX[User Experience] --> Features[Features]
-    
+
     Features --> Onboarding[Guided Onboarding]
     Features --> Tutorial[Roadmap Tutorial]
     Features --> Help[Comprehensive Help]
     Features --> Shortcuts[Keyboard Shortcuts]
     Features --> Feedback[Real-time Feedback]
     Features --> Responsive[Responsive Design]
-    
+
     style UX fill:#e1f5ff
     style Features fill:#fff9c4
 ```
 
 **UX Highlights:**
+
 - 🗺️ **Roadmap Tutorial** - Step-by-step guidance
 - ⌨️ **Keyboard Shortcuts** - Power user features
 - ❓ **Help System** - Comprehensive documentation
@@ -732,14 +749,15 @@ graph LR
         S5["5+ ML Algorithms"]
         S6["100% Reproducible"]
     end
-    
+
     Stats --> Impact[Impact]
-    
+
     style Stats fill:#fff9c4
     style Impact fill:#c8e6c9
 ```
 
 **Numbers:**
+
 - 📊 **7** Core backend services
 - 🔌 **12+** API endpoints
 - 📄 **6** Frontend pages
@@ -756,26 +774,27 @@ graph LR
 ```mermaid
 graph TB
     Problem[ML Workflow Problems] --> Solution[MODULUS Solution]
-    
+
     Solution --> Benefits[Benefits]
-    
+
     Benefits --> B1[Fast]
     Benefits --> B2[Easy]
     Benefits --> B3[AI-Powered]
     Benefits --> B4[Reproducible]
-    
+
     Benefits --> Impact[Impact]
-    
+
     Impact --> I1[Democratized ML]
     Impact --> I2[Faster Development]
     Impact --> I3[Educational Value]
-    
+
     style Solution fill:#c8e6c9
     style Benefits fill:#fff9c4
     style Impact fill:#e1f5ff
 ```
 
 **MODULUS:**
+
 - ✅ Simplifies ML workflows
 - ✅ Makes ML accessible to all
 - ✅ Provides AI-powered guidance
@@ -791,6 +810,7 @@ graph TB
 ## Questions?
 
 **Contact:**
+
 - 📧 Project Repository: [GitHub]
 - 📖 Documentation: Available in `/docs`
 - 🎓 Educational Resource: Open for learning
@@ -802,12 +822,14 @@ graph TB
 ## Appendix: Diagram Sources
 
 All diagrams in this presentation are created using Mermaid syntax and can be:
+
 - Rendered in Markdown viewers
 - Exported to PNG/PDF
 - Embedded in web pages
 - Converted for LaTeX inclusion
 
 **Tools:**
+
 - [Mermaid Live Editor](https://mermaid.live/)
 - VS Code with Mermaid extension
 - GitHub/GitLab native support
@@ -817,6 +839,7 @@ All diagrams in this presentation are created using Mermaid syntax and can be:
 ## Presentation Tips
 
 ### For Presenters:
+
 1. **Use infographics** - Visual diagrams are more engaging
 2. **Tell a story** - Connect slides with narrative flow
 3. **Demo live** - Show actual system in action
@@ -824,11 +847,12 @@ All diagrams in this presentation are created using Mermaid syntax and can be:
 5. **Keep it simple** - Avoid technical jargon for general audience
 
 ### Slide Flow:
+
 1. Problem → Solution → Features → Demo → Impact → Future
 
 ### Visual Style:
+
 - Use consistent color scheme
 - Keep text minimal, visuals prominent
 - Use animations for transitions
 - Include real screenshots from the system
-

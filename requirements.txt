@@ -45,6 +45,8 @@ requests
 
 # AI and LLM
 google-generativeai
+langchain
+langchain-openai
 
 # Development
 pytest

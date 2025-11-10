@@ -8,6 +8,7 @@ from typing import Dict, List, Any, Optional
 import google.generativeai as genai
 import os
 import json
+import re
 
 # Load environment variables from .env file
 from dotenv import load_dotenv
@@ -15,26 +16,50 @@ load_dotenv()
 
 class AIAnalysisService:
     def __init__(self):
-        
-        self.api_key = os.getenv("GEMINI_API_KEY")
+        # Provider selection: prefer OpenRouter if key is available, otherwise Gemini
+        self.provider = None
         self.model = None
-        
-        if not self.api_key or self.api_key == "your_gemini_api_key_here":
-            print("⚠️  Gemini API key not configured. AI analysis will use fallback mode.")
-            print("📝 To enable AI analysis:")
-            print("   1. Create a .env file in the project root")
-            print("   2. Add: GEMINI_API_KEY=your_actual_api_key")
-            print("   3. Get your API key from: https://makersuite.google.com/app/apikey")
-            return
-        
-        try:
-            # Configure Gemini API
-            genai.configure(api_key=self.api_key)
-            self.model = genai.GenerativeModel('gemini-2.5-flash')
-            print("✅ Gemini API configured successfully")
-        except Exception as e:
-            print(f"❌ Failed to initialize Gemini API: {e}")
-            self.model = None
+
+        self.gemini_api_key = os.getenv("GEMINI_API_KEY")
+        self.openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
+        self.openrouter_model = os.getenv("OPENROUTER_MODEL", "deepseek/deepseek-chat-v3.1:free")
+
+        # Try OpenRouter (LangChain) first if configured
+        if self.openrouter_api_key:
+            try:
+                # Lazy import so the app can still run without langchain installed
+                from langchain_openai import ChatOpenAI
+
+                self.model = ChatOpenAI(
+                    api_key=self.openrouter_api_key,
+                    base_url="https://openrouter.ai/api/v1",
+                    model=self.openrouter_model,
+                    temperature=0.2,
+                )
+                self.provider = "openrouter"
+                print(f"✅ OpenRouter configured successfully (model: {self.openrouter_model})")
+                return
+            except Exception as e:
+                print(f"❌ Failed to initialize OpenRouter via LangChain: {e}")
+                self.model = None
+                self.provider = None
+
+        # Fallback to Gemini if available
+        if self.gemini_api_key and self.gemini_api_key != "your_gemini_api_key_here":
+            try:
+                genai.configure(api_key=self.gemini_api_key)
+                self.model = genai.GenerativeModel('gemini-2.5-flash')
+                self.provider = "gemini"
+                print("✅ Gemini API configured successfully")
+                return
+            except Exception as e:
+                print(f"❌ Failed to initialize Gemini API: {e}")
+                self.model = None
+                self.provider = None
+
+        # Neither provider configured
+        print("⚠️  No AI provider configured. AI analysis will use fallback mode.")
+        print("📝 To enable AI analysis with Gemini set GEMINI_API_KEY, or with OpenRouter set OPENROUTER_API_KEY (and optional OPENROUTER_MODEL).")
     
     async def analyze_dataset_for_preprocessing(self, df: pd.DataFrame, dataset_name: str) -> Dict[str, Any]:
         """
@@ -134,7 +159,7 @@ class AIAnalysisService:
         
         # If model is not available, use fallback analysis
         if self.model is None:
-            print("🔄 Using fallback analysis (Gemini API not configured)")
+            print("🔄 Using fallback analysis (AI provider not configured)")
             return self._get_fallback_analysis(df, dataset_info)
         
         # Prepare data summary for AI
@@ -212,17 +237,64 @@ class AIAnalysisService:
         """
         
         try:
-            response = self.model.generate_content(prompt)
-            
-            # Parse JSON response
-            ai_response = json.loads(response.text)
-            print("✅ Gemini AI analysis completed successfully")
-            return ai_response
+            # Different providers have different invocation styles
+            if self.provider == "gemini":
+                response = self.model.generate_content(prompt)
+                text = getattr(response, "text", None) or ""
+            elif self.provider == "openrouter":
+                # LangChain ChatOpenAI
+                response = self.model.invoke(prompt)
+                # response is a BaseMessage; content may be string or list of chunks
+                text = getattr(response, "content", "") or ""
+                if isinstance(text, list):
+                    text = "".join([chunk.get("text", "") if isinstance(chunk, dict) else str(chunk) for chunk in text])
+            else:
+                print("⚠️ Unknown AI provider, using fallback.")
+                return self._get_fallback_analysis(df, dataset_info)
+
+            parsed = self._parse_json_from_text(text)
+            if parsed is None:
+                raise ValueError("Model did not return valid JSON")
+
+            print("✅ AI analysis completed successfully")
+            return parsed
         except Exception as e:
-            print(f"❌ Gemini AI analysis failed: {e}")
+            print(f"❌ AI analysis failed: {e}")
             print("🔄 Falling back to heuristic analysis")
             # Fallback if AI fails
             return self._get_fallback_analysis(df, dataset_info)
+
+    def _parse_json_from_text(self, text: str) -> Optional[Dict[str, Any]]:
+        """
+        Try to parse JSON from a model response. Handles code fences and extra prose.
+        """
+        if not text:
+            return None
+        # If it's already valid JSON
+        try:
+            return json.loads(text)
+        except Exception:
+            pass
+
+        # Extract JSON inside code fences ```json ... ``` or plain ``` ... ```
+        fence_match = re.search(r"```(?:json)?\\s*(\\{[\\s\\S]*?\\})\\s*```", text, re.IGNORECASE)
+        if fence_match:
+            fenced = fence_match.group(1)
+            try:
+                return json.loads(fenced)
+            except Exception:
+                pass
+
+        # Last resort: find the first {...} JSON-looking block
+        brace_match = re.search(r"(\\{[\\s\\S]*\\})", text)
+        if brace_match:
+            candidate = brace_match.group(1)
+            try:
+                return json.loads(candidate)
+            except Exception:
+                return None
+
+        return None
     
     def _generate_recommendations(self, df: pd.DataFrame, ai_analysis: Dict) -> Dict[str, Any]:
         """Generate actionable recommendations based on AI analysis"""

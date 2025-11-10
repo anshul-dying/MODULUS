@@ -1,6 +1,7 @@
 # MODULUS - High Level Design (HLD)
 
 ## Table of Contents
+
 1. [System Overview](#system-overview)
 2. [Architecture Design](#architecture-design)
 3. [System Components](#system-components)
@@ -17,6 +18,7 @@
 MODULUS is an end-to-end machine learning platform that simplifies the ML lifecycle from data ingestion to model deployment. The system provides an interactive web interface for automated data preprocessing, model training, and artifact export.
 
 ### Key Features
+
 - **Automated Data Preprocessing** with AI-powered suggestions
 - **Interactive Web Interface** for non-technical users
 - **Multiple ML Domains** - Tabular, Computer Vision
@@ -35,19 +37,19 @@ graph TB
         Browser["Web Browser"]
         User["End User"]
     end
-    
+
     subgraph Presentation["Presentation Layer"]
         React["React Frontend<br/>Port: 5173"]
         Components["UI Components"]
         State["State Management"]
     end
-    
+
     subgraph API["API Gateway Layer"]
         FastAPI["FastAPI Backend<br/>Port: 8000"]
         CORS["CORS Middleware"]
         Validation["Request Validation"]
     end
-    
+
     subgraph Business["Business Logic Layer"]
         DatasetService["Dataset Service"]
         PreprocessingService["Preprocessing Service"]
@@ -57,7 +59,7 @@ graph TB
         AIService["AI Analysis Service"]
         ExportService["Export Service"]
     end
-    
+
     subgraph Data["Data Layer"]
         FileSystem["File System Storage"]
         Uploads["uploads/"]
@@ -65,12 +67,12 @@ graph TB
         Artifacts["artifacts/"]
         Exports["exports/"]
     end
-    
+
     subgraph External["External Services"]
         OpenRouter["OpenRouter API<br/>Qwen Model"]
         Gemini["Google Gemini API"]
     end
-    
+
     User --> Browser
     Browser --> React
     React -->|HTTP/REST| FastAPI
@@ -78,7 +80,7 @@ graph TB
     Business --> Data
     AIService --> OpenRouter
     AIService --> Gemini
-    
+
     style Client fill:#e1f5ff
     style Presentation fill:#fff4e1
     style API fill:#e8f5e9
@@ -95,18 +97,18 @@ graph LR
         Web["Web Browser"]
         Mobile["Mobile Browser<br/>(Future)"]
     end
-    
+
     subgraph Layer2["Layer 2: Presentation"]
         Frontend["React SPA"]
         Static["Static Assets"]
     end
-    
+
     subgraph Layer3["Layer 3: API Gateway"]
         Gateway["FastAPI"]
         Auth["Auth (Future)"]
         RateLimit["Rate Limiting"]
     end
-    
+
     subgraph Layer4["Layer 4: Services"]
         S1["Dataset"]
         S2["Preprocessing"]
@@ -115,17 +117,17 @@ graph LR
         S5["AI Analysis"]
         S6["Export"]
     end
-    
+
     subgraph Layer5["Layer 5: Storage"]
         FS["File System"]
         Cache["Cache<br/>(Future)"]
     end
-    
+
     Layer1 --> Layer2
     Layer2 --> Layer3
     Layer3 --> Layer4
     Layer4 --> Layer5
-    
+
     style Layer1 fill:#e1f5ff
     style Layer2 fill:#fff4e1
     style Layer3 fill:#e8f5e9
@@ -150,7 +152,7 @@ graph TB
         Reports["Reports Page"]
         Help["Help Page"]
     end
-    
+
     subgraph Backend["Backend Services"]
         DatasetAPI["Dataset API"]
         PreprocessingAPI["Preprocessing API"]
@@ -160,7 +162,7 @@ graph TB
         AIAPI["AI Analysis API"]
         ExportAPI["Export API"]
     end
-    
+
     subgraph Core["Core Services"]
         DatasetSvc["DatasetService"]
         PreprocessingSvc["PreprocessingService"]
@@ -170,10 +172,10 @@ graph TB
         AISvc["AIAnalysisService"]
         ExportSvc["ExportService"]
     end
-    
+
     Frontend --> Backend
     Backend --> Core
-    
+
     style Frontend fill:#e1f5ff
     style Backend fill:#fff4e1
     style Core fill:#e8f5e9
@@ -189,7 +191,7 @@ sequenceDiagram
     participant Service
     participant Storage
     participant External
-    
+
     User->>Frontend: Upload Dataset
     Frontend->>API: POST /api/datasets/upload
     API->>Service: process_upload()
@@ -198,7 +200,7 @@ sequenceDiagram
     Service-->>API: Response
     API-->>Frontend: Dataset Info
     Frontend-->>User: Show Success
-    
+
     User->>Frontend: Run AI Analysis
     Frontend->>API: POST /api/ai/analyze/{name}
     API->>Service: analyze_dataset()
@@ -221,28 +223,28 @@ flowchart TD
     Upload --> Validate[Validate File]
     Validate -->|Valid| Store1[(Storage: uploads/)]
     Validate -->|Invalid| Error1[Error Response]
-    
+
     Store1 --> EDA[Generate EDA]
     EDA --> Report1[HTML Report]
     Report1 --> Store2[(Storage: artifacts/)]
-    
+
     Store1 --> Preprocess[Preprocessing]
     Preprocess --> AI[AI Analysis]
     AI --> Suggestions[Get Suggestions]
     Suggestions --> Manual[Manual Operations]
     Manual --> Processed[Processed Dataset]
     Processed --> Store3[(Storage: processed/)]
-    
+
     Store3 --> Train[Training]
     Train --> Model[Model + Report]
     Model --> Store4[(Storage: artifacts/)]
-    
+
     Store4 --> Export[Export Package]
     Export --> ZIP[ZIP File]
     ZIP --> Store5[(Storage: exports/)]
-    
+
     Store5 --> Download([User Downloads])
-    
+
     style Start fill:#c8e6c9
     style Download fill:#c8e6c9
     style Store1 fill:#fff9c4
@@ -295,14 +297,14 @@ graph TB
         Shadcn["shadcn/ui"]
         Router["React Router"]
     end
-    
+
     subgraph BackendTech["Backend Technologies"]
         FastAPI["FastAPI"]
         Python["Python 3.10+"]
         Uvicorn["Uvicorn"]
         Pydantic["Pydantic"]
     end
-    
+
     subgraph MLTech["ML Technologies"]
         SKLearn["scikit-learn"]
         Pandas["pandas"]
@@ -310,17 +312,17 @@ graph TB
         PyTorch["PyTorch"]
         Transformers["transformers"]
     end
-    
+
     subgraph AITech["AI Technologies"]
         OpenRouter["OpenRouter"]
         Gemini["Gemini API"]
         LangChain["LangChain"]
     end
-    
+
     FrontendTech --> BackendTech
     BackendTech --> MLTech
     BackendTech --> AITech
-    
+
     style FrontendTech fill:#e1f5ff
     style BackendTech fill:#fff4e1
     style MLTech fill:#e8f5e9
@@ -336,21 +338,21 @@ graph TB
 ```mermaid
 graph LR
     Dev[Developer Machine]
-    
+
     subgraph Local["Local Environment"]
         FrontendServer["Vite Dev Server<br/>:5173"]
         BackendServer["Uvicorn Server<br/>:8000"]
         FileSystem["Local File System"]
     end
-    
+
     Browser["Web Browser"]
-    
+
     Dev --> FrontendServer
     Dev --> BackendServer
     Browser --> FrontendServer
     FrontendServer --> BackendServer
     BackendServer --> FileSystem
-    
+
     style Local fill:#e8f5e9
 ```
 
@@ -361,40 +363,40 @@ graph TB
     subgraph Internet["Internet"]
         Users["End Users"]
     end
-    
+
     subgraph Cloud["Cloud Infrastructure"]
         subgraph LoadBalancer["Load Balancer"]
             LB["NGINX/ALB"]
         end
-        
+
         subgraph FrontendCluster["Frontend Cluster"]
             F1["Frontend Instance 1"]
             F2["Frontend Instance 2"]
             F3["Frontend Instance N"]
         end
-        
+
         subgraph BackendCluster["Backend Cluster"]
             B1["Backend Instance 1"]
             B2["Backend Instance 2"]
             B3["Backend Instance N"]
         end
-        
+
         subgraph Storage["Storage"]
             S3["S3 Bucket"]
             RDS["RDS Database<br/>(Future)"]
         end
-        
+
         subgraph Cache["Cache Layer"]
             Redis["Redis<br/>(Future)"]
         end
     end
-    
+
     Users --> LB
     LB --> FrontendCluster
     FrontendCluster --> BackendCluster
     BackendCluster --> Storage
     BackendCluster --> Cache
-    
+
     style Cloud fill:#e8f5e9
 ```
 
@@ -411,30 +413,30 @@ graph TB
         CORS["CORS Policy"]
         Firewall["Firewall"]
     end
-    
+
     subgraph Application["Application Security"]
         Validation["Input Validation"]
         Sanitization["Data Sanitization"]
         Auth["Authentication<br/>(Future)"]
         RateLimit["Rate Limiting"]
     end
-    
+
     subgraph Data["Data Security"]
         Encryption["Encryption at Rest"]
         Backup["Backup Strategy"]
         Audit["Audit Logging"]
     end
-    
+
     subgraph FileSystem["File System Security"]
         PathValidation["Path Validation"]
         AccessControl["Access Control"]
         FileTypeCheck["File Type Validation"]
     end
-    
+
     Network --> Application
     Application --> Data
     Data --> FileSystem
-    
+
     style Network fill:#ffcdd2
     style Application fill:#fff9c4
     style Data fill:#c8e6c9
@@ -452,27 +454,27 @@ graph LR
     subgraph Current["Current Architecture"]
         Single["Single Instance"]
     end
-    
+
     subgraph Horizontal["Horizontal Scaling"]
         LB["Load Balancer"]
         Multi["Multiple Instances"]
     end
-    
+
     subgraph Vertical["Vertical Scaling"]
         Resources["More Resources"]
     end
-    
+
     subgraph Optimizations["Performance Optimizations"]
         Cache["Caching"]
         Async["Async Processing"]
         CDN["CDN<br/>(Future)"]
     end
-    
+
     Current --> Horizontal
     Current --> Vertical
     Horizontal --> Optimizations
     Vertical --> Optimizations
-    
+
     style Current fill:#ffcdd2
     style Horizontal fill:#c8e6c9
     style Vertical fill:#fff9c4
@@ -481,19 +483,20 @@ graph LR
 
 ### Performance Characteristics
 
-| Component | Current Performance | Target Performance |
-|-----------|---------------------|-------------------|
-| API Response Time | < 180ms (p95) | < 100ms (p95) |
-| Concurrent Users | 120+ | 1000+ |
-| Data Processing | 1.2M rows/min | 5M+ rows/min |
-| Training Time | 3-18 min (10k rows) | < 10 min |
-| EDA Generation | < 45s (100k rows) | < 30s |
+| Component         | Current Performance | Target Performance |
+| ----------------- | ------------------- | ------------------ |
+| API Response Time | < 180ms (p95)       | < 100ms (p95)      |
+| Concurrent Users  | 120+                | 1000+              |
+| Data Processing   | 1.2M rows/min       | 5M+ rows/min       |
+| Training Time     | 3-18 min (10k rows) | < 10 min           |
+| EDA Generation    | < 45s (100k rows)   | < 30s              |
 
 ---
 
 ## System Boundaries
 
 ### In Scope
+
 - ✅ Tabular data preprocessing
 - ✅ Tabular model training (classification/regression)
 - ✅ Computer vision model training (CLI)
@@ -503,6 +506,7 @@ graph LR
 - ✅ Web-based user interface
 
 ### Out of Scope (Future)
+
 - ❌ Multi-user authentication
 - ❌ Real-time collaboration
 - ❌ Cloud storage integration
@@ -519,19 +523,20 @@ graph LR
 ```mermaid
 graph LR
     MODULUS["MODULUS System"]
-    
+
     OpenRouter["OpenRouter API<br/>- Qwen Model<br/>- LLM Analysis"]
     Gemini["Google Gemini API<br/>- Alternative LLM<br/>- Fallback"]
-    
+
     MODULUS --> OpenRouter
     MODULUS --> Gemini
-    
+
     style MODULUS fill:#e8f5e9
     style OpenRouter fill:#fff9c4
     style Gemini fill:#fff9c4
 ```
 
 ### Future Integration Points
+
 - Cloud Storage (S3, Azure Blob)
 - Model Registry (MLflow, Weights & Biases)
 - CI/CD Pipelines
@@ -543,29 +548,34 @@ graph LR
 ## Non-Functional Requirements
 
 ### Performance Requirements
+
 - API response time: < 200ms (95th percentile)
 - Support 100+ concurrent users
 - Process datasets up to 10GB
 - Generate reports in < 60 seconds
 
 ### Scalability Requirements
+
 - Horizontal scaling capability
 - Stateless service design
 - Efficient resource utilization
 
 ### Security Requirements
+
 - HTTPS in production
 - Input validation and sanitization
 - Path traversal protection
 - File type validation
 
 ### Reliability Requirements
+
 - 99% uptime target
 - Graceful error handling
 - Automatic recovery from transient failures
 - Data backup and recovery
 
 ### Usability Requirements
+
 - Intuitive user interface
 - Responsive design (desktop/tablet)
 - Comprehensive help system
@@ -592,17 +602,16 @@ graph LR
 
 ### Technical Risks
 
-| Risk | Impact | Probability | Mitigation |
-|------|--------|------------|------------|
-| API Rate Limits | High | Medium | Caching, fallback mechanisms |
-| Large File Handling | Medium | High | Streaming, chunking |
-| LLM API Failures | Medium | Medium | Fallback to heuristics |
-| Storage Exhaustion | High | Low | Cleanup jobs, size limits |
-| Performance Degradation | Medium | Medium | Caching, optimization |
+| Risk                    | Impact | Probability | Mitigation                   |
+| ----------------------- | ------ | ----------- | ---------------------------- |
+| API Rate Limits         | High   | Medium      | Caching, fallback mechanisms |
+| Large File Handling     | Medium | High        | Streaming, chunking          |
+| LLM API Failures        | Medium | Medium      | Fallback to heuristics       |
+| Storage Exhaustion      | High   | Low         | Cleanup jobs, size limits    |
+| Performance Degradation | Medium | Medium      | Caching, optimization        |
 
 ---
 
 ## Conclusion
 
 MODULUS follows a modern, scalable architecture that separates concerns across presentation, API, business logic, and data layers. The system is designed for extensibility, allowing future enhancements while maintaining current functionality and performance.
-
